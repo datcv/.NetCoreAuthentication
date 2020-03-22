@@ -1,0 +1,7 @@
+﻿HOME PAGE
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorizationService
+@if ( (await authorizationService.AuthorizeAsync(User, "Claim.DoB")).Succeeded)
+{
+    <h1>Name @User.Identity.Name - DoB: @User.FindFirst(System.Security.Claims.ClaimTypes.DateOfBirth).Value</h1>
+}

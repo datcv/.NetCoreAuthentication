@@ -7,10 +7,17 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace _3.Authorization.Controllers
+namespace _4.AuthorizationExtra.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IAuthorizationService _authorizationService;
+
+        public HomeController(IAuthorizationService authorizationService)
+        {
+            this._authorizationService = authorizationService;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -28,6 +35,36 @@ namespace _3.Authorization.Controllers
         {
             return View("Secret");
         }
+
+        
+        //[Authorize(Policy = "AdminRole")]
+        public async Task<IActionResult> SecretService()
+        {
+            var result = await this._authorizationService.AuthorizeAsync(this.User, "AdminRole");
+            if (!result.Succeeded)
+            {
+                return RedirectToAction(nameof(HomeController.Authenticate));
+            }
+
+            return View("Index");
+        }
+
+
+        public async Task<IActionResult> SecretService2([FromServices] IAuthorizationService authorizationService)
+        {
+            var authorizationPolicyBuilder = new AuthorizationPolicyBuilder();
+            authorizationPolicyBuilder.RequireClaim(ClaimTypes.Name, "Peter");
+            var customAuthPolicy = authorizationPolicyBuilder.Build();
+            var result = await authorizationService.AuthorizeAsync(this.User, customAuthPolicy);
+            
+            if (!result.Succeeded)
+            {
+                return RedirectToAction(nameof(HomeController.Authenticate));
+            }
+
+            return View("Index");
+        }
+
 
         public IActionResult Authenticate()
         {
