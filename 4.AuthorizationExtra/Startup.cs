@@ -2,6 +2,7 @@ using _4.AuthorizationExtra.AuthorizationRequirements;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
@@ -50,7 +51,16 @@ namespace _4.AuthorizationExtra
             });
 
             services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(config =>
+            {
+
+                // Global Authorization Filter
+                var authBuilder = new AuthorizationPolicyBuilder();
+                authBuilder.RequireAuthenticatedUser();
+                var authPolicy = authBuilder.Build();
+
+                config.Filters.Add(new AuthorizeFilter(authPolicy));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

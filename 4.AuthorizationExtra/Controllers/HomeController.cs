@@ -66,6 +66,7 @@ namespace _4.AuthorizationExtra.Controllers
         }
 
 
+        [AllowAnonymous]
         public IActionResult Authenticate()
         {
             var claims = new List<Claim>()
