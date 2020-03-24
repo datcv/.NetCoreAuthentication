@@ -1,5 +1,7 @@
 using _4.AuthorizationExtra.AuthorizationRequirements;
 using _4.AuthorizationExtra.Controllers;
+using _4.AuthorizationExtra.Transformer;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -53,15 +55,18 @@ namespace _4.AuthorizationExtra
 
             services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
             services.AddScoped<IAuthorizationHandler, CookieAuthorizationHandler>();
+            services.AddScoped<IClaimsTransformation, ClaimsTransformation>();
+
+
             services.AddControllersWithViews(config =>
             {
 
                 // Global Authorization Filter
-                var authBuilder = new AuthorizationPolicyBuilder();
-                authBuilder.RequireAuthenticatedUser();
-                var authPolicy = authBuilder.Build();
+                //var authBuilder = new AuthorizationPolicyBuilder();
+                //authBuilder.RequireAuthenticatedUser();
+                //var authPolicy = authBuilder.Build();
 
-                config.Filters.Add(new AuthorizeFilter(authPolicy));
+                //config.Filters.Add(new AuthorizeFilter(authPolicy));
             });
         }
 
