@@ -1,4 +1,5 @@
 using _4.AuthorizationExtra.AuthorizationRequirements;
+using _4.AuthorizationExtra.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -51,6 +52,7 @@ namespace _4.AuthorizationExtra
             });
 
             services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
+            services.AddScoped<IAuthorizationHandler, CookieAuthorizationHandler>();
             services.AddControllersWithViews(config =>
             {
 
