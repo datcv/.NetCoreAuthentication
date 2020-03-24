@@ -1,5 +1,6 @@
 using _4.AuthorizationExtra.AuthorizationRequirements;
 using _4.AuthorizationExtra.Controllers;
+using _4.AuthorizationExtra.CustomPolicyProvider;
 using _4.AuthorizationExtra.Transformer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -52,6 +53,9 @@ namespace _4.AuthorizationExtra
                 });
 
             });
+
+            services.AddSingleton<IAuthorizationPolicyProvider, CustomAuthorizationPolicyProvider>();
+            services.AddScoped<IAuthorizationHandler, SecurityLevelHandler>();
 
             services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
             services.AddScoped<IAuthorizationHandler, CookieAuthorizationHandler>();

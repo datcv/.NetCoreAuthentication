@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using _4.AuthorizationExtra.CustomPolicyProvider;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -36,7 +37,18 @@ namespace _4.AuthorizationExtra.Controllers
             return View("Secret");
         }
 
-        
+        [SecurityLevel(1)]
+        public IActionResult SecretLevel()
+        {
+            return View("Secret");
+        }
+
+        [SecurityLevel(3)]
+        public IActionResult SecretHigherLevel()
+        {
+            return View("Secret");
+        }
+
         //[Authorize(Policy = "AdminRole")]
         public async Task<IActionResult> SecretService()
         {
@@ -76,6 +88,7 @@ namespace _4.AuthorizationExtra.Controllers
                 new Claim("Random Type", "AAAAAA"),
                 new Claim(ClaimTypes.Role, "Admin"),
                 new Claim(ClaimTypes.DateOfBirth, "11223344"),
+                new Claim(DynamicPolicies.SecurityLevel, "2"),
             };
 
             var testIdentity = new ClaimsIdentity(claims, "Test Identity");
